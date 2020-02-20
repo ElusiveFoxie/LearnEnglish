@@ -16,7 +16,7 @@ pip3 install bs4
 |_____|___|__,|_| |_|_|  |_____|_|_|_  |_|_|___|_|_|  |___|_  |  |_____|_____| |_| |____/ 
                                    |___|                  |___|                                    
     
-LeanEnglish by WOTD v1.0 by ElusiveFox (github_link) 
+LeanEnglish by WOTD v1.0 by ElusiveFoxie (https://github.com/ElusiveFoxie/LearnEnglish) 
 Usage: python3 LearnEnglish.py [Options] 
 
 GENERAL:
