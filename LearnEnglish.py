@@ -196,8 +196,7 @@ def GenerateTest(x):
 if __name__ == '__main__':
 
     version = "LeanEnglish v1.0 by ElusiveFox (https://github.com/ElusiveFoxie/LearnEnglish)"
-    banner = """
-                                                                                          
+    banner = """                                                                                   
  __                       _____         _ _     _      _          _ _ _ _____ _____ ____  
 |  |   ___ ___ ___ ___   |   __|___ ___| |_|___| |_   | |_ _ _   | | | |     |_   _|    \\ 
 |  |__| -_| .'|  _|   |  |   __|   | . | | |_ -|   |  | . | | |  | | | |  |  | | | |  |  |
