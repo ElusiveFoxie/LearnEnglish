@@ -195,7 +195,7 @@ def GenerateTest(x):
 
 if __name__ == '__main__':
 
-    version = "LeanEnglish v1.0 by ElusiveFox (github_link)"
+    version = "LeanEnglish v1.0 by ElusiveFox (https://github.com/ElusiveFoxie/LearnEnglish)"
     banner = """
                                                                                           
  __                       _____         _ _     _      _          _ _ _ _____ _____ ____  
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     """
     if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
         print(banner)
-        print("LeanEnglish by WOTD v1.0 by ElusiveFox (github_link) \nUsage: python3 LearnEnglish.py [Options] \n")
+        print("LeanEnglish by WOTD v1.0 by ElusiveFox (https://github.com/ElusiveFoxie/LearnEnglish) \nUsage: python3 LearnEnglish.py [Options] \n")
         print("""GENERAL:
   -h: prints out help 
   -t: prints out today's WOTD
