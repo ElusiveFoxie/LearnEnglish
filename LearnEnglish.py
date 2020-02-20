@@ -259,6 +259,9 @@ if __name__ == '__main__':
 # <some instruction>
 #print("--- %s seconds ---" % (time.time() - start_time))
 ######################  To Do ##################################################
+# -weekly: generate test from words added from this week
+# -add-week: adds words from this week
+# -add-from <date format: yyyy:mm:dd>: adds all words from specified date
 # wyjątki
 # 1 - no internet connection
 # 2 - no file dict.txt
