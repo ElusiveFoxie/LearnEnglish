@@ -2,10 +2,10 @@
 App to learn english words of the day
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install bs4.
+Use the package manager pip3 to install bs4.
 
 ```bash
-pip install bs4
+pip3 install bs4
 ```
 
 ## Usage
