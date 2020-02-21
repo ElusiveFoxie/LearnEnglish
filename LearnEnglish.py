@@ -15,11 +15,8 @@ def ScrapEnglishWordOfTheDay(date):
         html_doc = response.text
         soup = BeautifulSoup(html_doc, 'html.parser')
 
-        # WORD -> title
-        title = soup.title.text
-        WordRegex = r"(Word of the Day:)(\s)(\S+)"
-        m = re.search(WordRegex, title)
-        NewWord = m.group(3)
+        # WORD -> H1 tag
+        NewWord = soup.find('h1').text.capitalize()
 
         # PART OF SPEECH -> span z class="main-attr"
         NewPartOfSpeech = soup.find("span", {"class": "main-attr"})
