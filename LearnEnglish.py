@@ -88,35 +88,17 @@ def ScrapEnglishDefinition(word):
 def ScrapEnglishWordOfTheToday():
     return ScrapEnglishWordOfTheDay(str(date.today()))
 
-def LessThanTen(x):
-    if (x < 10):
-        x = "0" + str(x)
-        return str(x)
-    else:
-        return str(x)
+def random_date(start, end):
+    delta = end - start
+    int_delta = delta.days
+    random_days = random.randrange(int_delta)
+    return start + datetime.timedelta(days=random_days)
 
 
 def GenerateRandomDate():
-    days30 = ["04","06","09","11"]
-    days31 = ["01","03","05","07","08","10","12"]
-    randomYear = str(random.randrange(2007, 2020, 1))
-    randomMonth = random.randrange(1, 12, 1)
-    randomMonth = LessThanTen(randomMonth)
-
-    if (randomMonth == "02"):
-        randomDay = random.randrange(1, 28, 1)
-        randomDay = LessThanTen(randomDay)
-
-    elif (randomMonth in days30):
-        randomDay = random.randrange(1, 30, 1)
-        randomDay = LessThanTen(randomDay)
-    elif (randomMonth in days31):
-        randomDay = random.randrange(1, 31, 1)
-        randomDay = LessThanTen(randomDay)
-
-    result = randomYear + "-" + randomMonth + "-" + randomDay
-    print (result)
-    return result
+    d1 = datetime.datetime.strptime('2007-01-01', '%Y-%m-%d')
+    d2 = datetime.datetime.strptime(str(datetime.date.today()), '%Y-%m-%d')
+    return (str(random_date(d1, d2)).replace(" 00:00:00",""))
 
 def ScrapRandomEnglishWordOfTheDay():
     return ScrapEnglishWordOfTheDay(GenerateRandomDate())
