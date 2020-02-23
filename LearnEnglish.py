@@ -25,21 +25,13 @@ def ScrapEnglishWordOfTheDay(date):
         NewTranscript = soup.find("span", {"class": "word-syllables"})
 
         #Definition
-        # duplicate soup object for modification
-        s = soup
-        # find the div containing definitions
-        d = s.find("div", {"class": "wod-definition-container"})
-        c = d.findChildren()
-        # list of nodes between first two <h2> tags
-        l = c[c.index(d.findAll('h2')[0])+1:c.index(d.findAll('h2')[1])]
-        results = []
-        for i in l:
-            if i.name == 'p':
-                if i.findChild('strong'):
-                    i.findChild('strong').extract()
-                results.append(i.text.strip())
-        NewDefinition = results[0] # just the first definition
+        NewDefinition = ScrapEnglishDefinition(NewWord.lower())
+        #scrap from original
+        if (NewDefinition == "Not found"):
+            NewDefinition = soup.find("div", {"class": "wod-definition-container"})
+            NewDefinition = NewDefinition.find('p').text
 
+        #< div class ="wod-definition-container" >
         result = str(NewWord + " # " + NewPartOfSpeech.text.strip() + " # " + NewTranscript.text.strip() + " # "+ NewDefinition)
         return result
 
