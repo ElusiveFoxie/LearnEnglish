@@ -5,7 +5,7 @@ import argparse
 import requests
 from bs4 import BeautifulSoup
 
-version = "LeanEnglish v1.1 by ElusiveFox, matisec, Nomad618 (https://github.com/ElusiveFoxie/LearnEnglish)"
+version = "LeanEnglish v2 by ElusiveFox, matisec, Nomad618 (https://github.com/ElusiveFoxie/LearnEnglish)"
 banner = """																				   
  __					      _____		    _ _ 	_	   _		  _ _ _ _____ _____ ____  
 |  |   ___ ___ ___ ___   |   __|___ ___| |_|___| |_   | |_ _ _   | | | |	 |_   _|	\\ 
@@ -272,7 +272,7 @@ class MyEnglishDictionary(MyDictionary):
 		else:
 			printMessage('[-] A connection error to "merriam-webster" has occurred. Status code:' + response.status_code, 0)
 			return None
-######################################################################################
+
 class Question:
 	def __init__(self):
 		conn = sqlite3.connect("EnglishDictionary.db")
