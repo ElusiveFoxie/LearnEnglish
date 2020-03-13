@@ -1,7 +1,5 @@
 import datetime
 import random
-import re
-import sys
 import sqlite3
 import argparse
 import requests
@@ -9,7 +7,7 @@ from bs4 import BeautifulSoup
 
 version = "LeanEnglish v1.1 by ElusiveFox, matisec, Nomad618 (https://github.com/ElusiveFoxie/LearnEnglish)"
 banner = """																				   
- __					   _____		 _ _	 _	  _		  _ _ _ _____ _____ ____  
+ __					      _____		    _ _ 	_	   _		  _ _ _ _____ _____ ____  
 |  |   ___ ___ ___ ___   |   __|___ ___| |_|___| |_   | |_ _ _   | | | |	 |_   _|	\\ 
 |  |__| -_| .'|  _|   |  |   __|   | . | | |_ -|   |  | . | | |  | | | |  |  | | | |  |  |
 |_____|___|__,|_| |_|_|  |_____|_|_|_  |_|_|___|_|_|  |___|_  |  |_____|_____| |_| |____/ 
@@ -24,7 +22,7 @@ Verbosity levels:
 2 -> errors pointing to specific methods
 '''
 
-	
+
 def getArguments():
 	parser = argparse.ArgumentParser(description = "App to learn English words of the day")
 	parser.add_argument("--version", dest="version", help="Print out version", action="store_true")
@@ -35,12 +33,12 @@ def getArguments():
 	getGroup.add_argument("-t", "--get-today", dest="today", help="Print today's word of the day and add word to the database", action="store_true")
 	getGroup.add_argument("-r", "--get-random", dest="random", help="Print radom word of the day and add word to the database", default=0, type=int)
 	getGroup.add_argument("-f", "--get-from", dest="dateFrom", help="Print word from specified date <date format: yyyy:mm:dd>")
-	
+
 	parser.add_argument("-g", "--gen-test", dest="testLength", help="Generate test of random words from the dictionary", type=int)
 
 	parser.add_argument("-s", "--show", dest="show", help="Show content of dictionary", action="store_true")
 	parser.add_argument("-c", "--clear", dest="clear", help="Clear dictionary", action="store_true")
-	
+
 	options = parser.parse_args()
 
 	if(not options.verbosity):
@@ -49,7 +47,7 @@ def getArguments():
 	if(options.verbosity > 2):
 		printMessage("[*] Max verbosity level is 2, changing...", 0)
 		options.verbosity = 2
-	
+
 	#validate date from --get-from argument
 
 	return options
@@ -80,9 +78,9 @@ class MyDictionary(object):
 	def __init__(self, filepath):
 		self.filepath = filepath
 		self.type = ""
-		
+
 		self.initDatabase()
-			
+
 
 	#### DATABASE OPERATIONS ####
 
@@ -91,7 +89,7 @@ class MyDictionary(object):
 		c = conn.cursor()
 
 		try:
-			if (c.execute("SELECT * FROM sqlite_master WHERE name ='dictionary' and type='table'").fetchone()):
+			if c.execute("SELECT * FROM sqlite_master WHERE name ='dictionary' and type='table'").fetchone():
 				printMessage("[+] Dictionary found",1)
 			else:
 				c.execute("""CREATE TABLE dictionary (
@@ -127,7 +125,7 @@ class MyDictionary(object):
 		conn = sqlite3.connect(self.filepath)
 		c = conn.cursor()
 		try:
-			if (c.execute("SELECT word FROM dictionary WHERE word='" + wordObj.word + "';").fetchone()):
+			if c.execute("SELECT word FROM dictionary WHERE word='" + wordObj.word + "';").fetchone():
 				print("[+] Word " + wordObj.word + " already exists in the database")
 			else:
 				c.execute("""
@@ -140,7 +138,7 @@ class MyDictionary(object):
 						+ "'" + wordObj.word + "', "
 						+ "'" + wordObj.partOfSpeech + "', "
 						+ "'" + wordObj.transcript + "', "
-						+ "'" + wordObj.definition 
+						+ "'" + wordObj.definition
 					+ "')"
 				)
 				conn.commit()
@@ -163,12 +161,12 @@ class MyDictionary(object):
 
 	#### DISPLAY METHODS ####
 
-	def show(self):	
+	def show(self):
 		printMessage("[*] Showing database...\n", 1)
 		wordsList = self.selectWholeDatabase()
 		for i in range(len(self.selectWholeDatabase())):
 			wordsList[i].show()
-	
+
 
 	#### SCRAP METHODS ####
 
@@ -189,26 +187,26 @@ class MyDictionary(object):
 		dateFrom = dateFrom.split("-")
 		dateFrom = datetime.date(int(dateFrom[0]), int(dateFrom[1]), int(dateFrom[2]))
 		delta = now - dateFrom
-		
+
 		newWordsList = []
 		for i in range(delta.days + 1):
 			day = dateFrom + datetime.timedelta(days=i)
 			newWordObj = self.scrapWordOfTheDay(day)
 			self.appendWord(newWordObj)
 			newWordsList.append(newWordObj)
-		
+
 		return newWordsList
-		
+
 	def scrapRandomWordOfTheDay(self):
 		return self.scrapWordOfTheDay(self.getRandomDate())
-	
 
-	#### OTHER METHODS ####	
-	
+
+	#### OTHER METHODS ####
+
 	def getRandomDate(self):
 		d1 = datetime.datetime.strptime('2007-01-01', '%Y-%m-%d')
 		d2 = datetime.datetime.strptime(str(datetime.date.today()), '%Y-%m-%d')
-		
+
 		delta = d2 - d1
 		intDelta = delta.days
 		randomDays = random.randrange(intDelta)
@@ -254,25 +252,81 @@ class MyEnglishDictionary(MyDictionary):
 						f.extract()
 					results.append(i.text.strip())
 			if(len(results)>0):
-				newDefinition = results[0]
+				seperator = ', '
+				newDefinition = seperator.join(results)
 			else:
 				printMessage("[-] Could not find definition for word " + newWord, 1)
 				newDefinition = "definition not found"
 
 
 			newWordObj = Word(
-				newWord, 
-				newPartOfSpeech.text.strip(), 
-				newTranscript.text.strip(), 
+				newWord,
+				newPartOfSpeech.text.strip(),
+				newTranscript.text.strip(),
 				newDefinition
 			)
-			
+
 			self.appendWord(newWordObj)
 			return newWordObj
 
 		else:
 			printMessage('[-] A connection error to "merriam-webster" has occurred. Status code:' + response.status_code, 0)
 			return None
+######################################################################################
+class Question:
+	def __init__(self):
+		conn = sqlite3.connect("EnglishDictionary.db")
+		c = conn.cursor()
+
+		self.full = []
+		try:
+			for row in c.execute("SELECT word, partOfSpeech, transcript, definition FROM dictionary;"):
+				newWordObj = Word(row[0], row[1], row[2], row[3])
+				self.full.append(newWordObj)
+		except:
+			printMessage("[-] Something went wrong in 'selectWholeDatabase' method", 2)
+		conn.close()
+		self.usedDefinitions = []
+		self.anwsers = ["A. ", "B. ", "C. ", "D. "]
+		self.correct = random.randrange(0, 3, 1)
+		self.randomWord = random.randrange(0, len(self.full), 1)
+		self.anwsers[self.correct] += self.full[self.randomWord].definition
+		self.usedDefinitions.append(self.full[self.randomWord].definition)
+
+		for i in range(0, 4):
+			if i != self.correct:
+				while (True):
+					randomDefinition = random.randrange(0, len(self.full), 1)
+					if self.full[randomDefinition].definition not in self.usedDefinitions and self.full[randomDefinition].partOfSpeech == self.full[self.randomWord].partOfSpeech:
+						self.anwsers[i] += self.full[randomDefinition].definition
+						self.usedDefinitions.append(self.full[randomDefinition].definition)
+						break
+
+	def ask(self):
+		print(self.full[self.randomWord].word + " " + self.full[self.randomWord].partOfSpeech + " " + self.full[self.randomWord].transcript)
+		for i in range(0, 4):
+			print(self.anwsers[i])
+		while (True):
+			print()
+			answer = input("Your Anwser (letter): ")
+			if (answer == chr(65 + self.correct)):
+				print("Correct \n")
+				break
+			else:
+				print("Wrong")
+
+######################################################################################
+class Quiz:
+
+	def __init__(self, questionNumber):
+		self.usedQuestions = []
+
+		for i in range(0, questionNumber):
+			myQuestion = Question()
+			if myQuestion not in self.usedQuestions:
+				myQuestion.ask()
+				self.usedQuestions.append(myQuestion)
+
 
 
 args = getArguments()
@@ -298,5 +352,7 @@ if(args):
 		answer = input("[?] Do you really want to purge the database? [Y/N]: ")
 		if(answer == "Y" or answer == "y"):
 			myDict.purgeDatabase()
+	if (args.testLength):
+		myQuiz = Quiz(args.testLength)
 
 
