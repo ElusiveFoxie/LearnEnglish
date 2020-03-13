@@ -39,7 +39,7 @@ def ScrapEnglishWordOfTheDay(date):
                 if f:
                     f.extract()
                 results.append(i.text.strip())
-        NewDefinition = results[0] # first definition
+        NewDefinition = " ".join(results) # all definitions
 
         result = str(
             NewWord + " # " + NewPartOfSpeech.text.strip() + " # " + NewTranscript.text.strip() + " # " + NewDefinition)
